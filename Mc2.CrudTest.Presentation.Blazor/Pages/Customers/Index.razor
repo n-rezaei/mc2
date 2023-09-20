@@ -1,0 +1,55 @@
+﻿@page "/customers"
+@using Mc2.CrudTest.Presentation.Blazor.Data
+@using Mc2.CrudTest.Presentation.Infrustructure;
+@using Mc2.CrudTest.Presentation.Infrustructure.Repositories;
+@using Mc2.CrudTest.Presentation.Domain;
+@inject WeatherForecastService ForecastService
+@inject ICustomersRespository customersRespository
+@inject NavigationManager navigationManager
+
+<PageTitle>Customers</PageTitle>
+
+<h1>Customers</h1>
+
+@if (customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <a href="/customers/create">Add new</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Date of Birth</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Bank Account Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in customers)
+            {
+                <tr>
+                    <td>@forecast.FirstName</td>
+                    <td>@forecast.LastName</td>
+                    <td>@forecast.Email</td>
+                    <td>@forecast.PhoneNumber</td>
+                    <td>@forecast.DateOfBirth.ToShortDateString()</td>
+                    <td>@forecast.BankAccountNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    IQueryable<Customer> customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = customersRespository.GetAll();
+    }
+}

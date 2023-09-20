@@ -1,0 +1,54 @@
+﻿@page "/customers/create"
+@using Mc2.CrudTest.Presentation.Blazor.Data
+@using Mc2.CrudTest.Presentation.Infrustructure;
+@using Mc2.CrudTest.Presentation.Infrustructure.Repositories;
+@using Mc2.CrudTest.Presentation.Domain;
+@inject WeatherForecastService ForecastService
+@inject ICustomersRespository customersRespository
+
+<PageTitle>Add New Customer</PageTitle>
+
+<h1>Add New Customer</h1>
+
+<EditForm Model=@customer OnSubmit="@OnSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="FirstName">First Name</label>
+        <InputText @bind-Value=customer.FirstName class="form-control" id="FirstName" />
+    </div>
+    <div class="form-group">
+        <label for="LastName">Last Name</label>
+        <InputText @bind-Value=customer.LastName class="form-control" id="LastName" />
+    </div>
+    <div class="form-group">
+        <label for="DateOfBirth">Date of Birth</label>
+        <InputDate @bind-Value=customer.DateOfBirth class="form-control" id="DateOfBirth" />
+    </div>
+    <div class="form-group">
+        <label for="PhoneNumber">Phone Number</label>
+        <InputText @bind-Value=customer.PhoneNumber class="form-control" id="PhoneNumber" />
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <InputText @bind-Value=customer.Email class="form-control" id="Email" />
+    </div>
+    <div class="form-group">
+        <label for="BankAccountNumber">Bank Account Number</label>
+        <InputText @bind-Value=customer.BankAccountNumber class="form-control" id="BankAccountNumber" />
+    </div>
+    <input type="submit" class="btn btn-primary" value="Save" />
+</EditForm>
+
+@code {
+    Customer customer = new Customer();
+
+    void OnSubmit(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        //add to database
+        if (formIsValid)
+        {
+            customersRespository.Add(editContext.Model as Customer);
+        }
+    }
+}
